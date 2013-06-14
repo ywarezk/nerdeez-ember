@@ -196,9 +196,11 @@ data = Ember.Application.NAMESPACES_BY_ID;
 for (var k in data) {
     if (data.hasOwnProperty(k)) {
        app = data[k];
-       app.register('wormhole:current', Nerdeez.Wormhole, {singleton: true});
-       app.inject('controller', 'wormhole', 'wormhole:current');
-       app.inject('view', 'wormhole', 'wormhole:current');
-       app.inject('store', 'wormhole', 'wormhole:current');
+       if(typeof app.register !== "undefined"){
+	       app.register('wormhole:current', Nerdeez.Wormhole, {singleton: true});
+	       app.inject('controller', 'wormhole', 'wormhole:current');
+	       app.inject('view', 'wormhole', 'wormhole:current');
+	       app.inject('store', 'wormhole', 'wormhole:current');
+	   }
     }
 }

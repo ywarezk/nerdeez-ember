@@ -122,8 +122,6 @@ Nerdeez.Wormhole = Ember.Object.extend({
             }
         });
         
-        //save the instance (singleton)
-        Nerdeez.Wormhole.prototype.wormholeInstance = this;
     },
 
 	/**
@@ -195,45 +193,3 @@ Nerdeez.Wormhole = Ember.Object.extend({
     }
 });
 
-//iterate on applications inject and register
-/*var data = Ember.Application.NAMESPACES;
-for (var i=0; i<data.length; i++) {
-	app = data[i];
-	appString = app.toString();
-	appObject = window[appString];
-    if(typeof appObject.register !== "undefined"){
-       appObject.register('wormhole:current', Nerdeez.Wormhole, {singleton: true});
-       appObject.inject('controller', 'wormhole', 'wormhole:current');
-       appObject.inject('view', 'wormhole', 'wormhole:current');
-       appObject.inject('DS.DjangoTastypieAdapter', 'wormhole', 'wormhole:current');
-       appObject.inject('DS.Store', 'wormhole', 'wormhole:current');
-       appObject.inject('WorkerimClient.store', 'wormhole', 'wormhole:current');
-       appObject.inject('Ember.Object', 'wormhole', 'wormhole:current');
-       appObject.inject('application', 'wormhole', 'wormhole:current');
-       appObject.inject('application:store', 'wormhole', 'wormhole:current');
-    }
-}*/
-
-Ember.Application.initializer({
-	name: "wormhole",
-	 
-	initialize: function(container, application) {
-		//var store = container.lookup('store:main');
-		//var obj = store.load(CrashLog.User, currentUser);
-	 
-		container.optionsForType('wormhole', { instantiate: false, singleton: true });
-		container.register('wormhole', 'current', Nerdeez.Wormhole);
-	}
-});
- 
-Ember.Application.initializer({
-	name: "injectWormhole",
-	after: 'wormhole',
-	 
-	initialize: function(container) {
-		container.injection('application:main', 'wormhole', 'wormhole:current');
-		container.typeInjection('application:main', 'wormhole', 'wormhole:current');
-		//container.typeInjection('store', 'wormhole', 'wormhole:current');
-		//container.typeInjection('store:adapter', 'wormhole', 'wormhole:current');
-	}
-});

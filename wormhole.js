@@ -16,6 +16,7 @@ if (typeof Nerdeez === "undefined")
 
 /**
  * using porthole.js this will be used to create crossdomain ajax communications using iframes
+ * this class is a singletone service and created once.
  * 
  * @class Wormhole
  * @namespace Nerdeez
@@ -85,7 +86,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
      * @type strng
      */
     serverUrl: 'http://localhost:8000/',
-	
+    
 	/**
 	 * @private
 	 * 
@@ -120,6 +121,9 @@ Nerdeez.Wormhole = Ember.Object.extend({
                 default: throw Error("unknown message type: " + data.type);
             }
         });
+        
+        //save the instance (singleton)
+        Nerdeez.Wormhole.prototype.wormholeInstance = this;
     },
 
 	/**
@@ -192,15 +196,44 @@ Nerdeez.Wormhole = Ember.Object.extend({
 });
 
 //iterate on applications inject and register
-data = Ember.Application.NAMESPACES_BY_ID;
-for (var k in data) {
-    if (data.hasOwnProperty(k)) {
-       app = data[k];
-       if(typeof app.register !== "undefined"){
-	       app.register('wormhole:current', Nerdeez.Wormhole, {singleton: true});
-	       app.inject('controller', 'wormhole', 'wormhole:current');
-	       app.inject('view', 'wormhole', 'wormhole:current');
-	       app.inject('store', 'wormhole', 'wormhole:current');
-	   }
+/*var data = Ember.Application.NAMESPACES;
+for (var i=0; i<data.length; i++) {
+	app = data[i];
+	appString = app.toString();
+	appObject = window[appString];
+    if(typeof appObject.register !== "undefined"){
+       appObject.register('wormhole:current', Nerdeez.Wormhole, {singleton: true});
+       appObject.inject('controller', 'wormhole', 'wormhole:current');
+       appObject.inject('view', 'wormhole', 'wormhole:current');
+       appObject.inject('DS.DjangoTastypieAdapter', 'wormhole', 'wormhole:current');
+       appObject.inject('DS.Store', 'wormhole', 'wormhole:current');
+       appObject.inject('WorkerimClient.store', 'wormhole', 'wormhole:current');
+       appObject.inject('Ember.Object', 'wormhole', 'wormhole:current');
+       appObject.inject('application', 'wormhole', 'wormhole:current');
+       appObject.inject('application:store', 'wormhole', 'wormhole:current');
     }
-}
+}*/
+
+Ember.Application.initializer({
+	name: "wormhole",
+	 
+	initialize: function(container, application) {
+		//var store = container.lookup('store:main');
+		//var obj = store.load(CrashLog.User, currentUser);
+	 
+		container.optionsForType('wormhole', { instantiate: false, singleton: true });
+		container.register('wormhole', 'current', Nerdeez.Wormhole);
+	}
+});
+ 
+Ember.Application.initializer({
+	name: "injectWormhole",
+	after: 'wormhole',
+	 
+	initialize: function(container) {
+		container.injection('application:main', 'wormhole', 'wormhole:current');
+		container.typeInjection('application:main', 'wormhole', 'wormhole:current');
+		//container.typeInjection('store', 'wormhole', 'wormhole:current');
+		//container.typeInjection('store:adapter', 'wormhole', 'wormhole:current');
+	}
+});

@@ -17,7 +17,6 @@ if (typeof Nerdeez === "undefined")
 
 /**
  * using porthole.js this will be used to create crossdomain ajax communications using iframes
- * this class is a singletone service and created once.
  * 
  * @class Wormhole
  * @namespace Nerdeez
@@ -123,8 +122,6 @@ Nerdeez.Wormhole = Ember.Object.extend({
             }
         });
         
-        //save the instance (singleton)
-        Nerdeez.Wormhole.prototype.wormholeInstance = this;
     },
 
 	/**

@@ -4,9 +4,10 @@
  * Example:
  * 
  * ```javascript
- * Nerdeez.crossDomain
- * ```
  * 
+ * wormhole = Nerdeez.Wormhole.create({serverUrl: 'http://foo.com'});
+ * wormhole.ajax({url: url, type: type, data: pass_data, dataType: 'json', contentType: 'application/json', successFunction: successFunction, failFunction: failFunction});
+ * ```
  * @requires porthole.js
  */
 
@@ -16,6 +17,7 @@ if (typeof Nerdeez === "undefined")
 
 /**
  * using porthole.js this will be used to create crossdomain ajax communications using iframes
+ * this class is a singletone service and created once.
  * 
  * @class Wormhole
  * @namespace Nerdeez
@@ -85,7 +87,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
      * @type strng
      */
     serverUrl: 'http://localhost:8000/',
-	
+    
 	/**
 	 * @private
 	 * 
@@ -120,6 +122,9 @@ Nerdeez.Wormhole = Ember.Object.extend({
                 default: throw Error("unknown message type: " + data.type);
             }
         });
+        
+        //save the instance (singleton)
+        Nerdeez.Wormhole.prototype.wormholeInstance = this;
     },
 
 	/**
@@ -191,14 +196,3 @@ Nerdeez.Wormhole = Ember.Object.extend({
     }
 });
 
-//iterate on applications inject and register
-data = Ember.Application.NAMESPACES_BY_ID;
-for (var k in data) {
-    if (data.hasOwnProperty(k)) {
-       app = data[k];
-       app.register('wormhole:current', Nerdeez.Wormhole, {singleton: true});
-       app.inject('controller', 'wormhole', 'wormhole:current');
-       app.inject('view', 'wormhole', 'wormhole:current');
-       app.inject('store', 'wormhole', 'wormhole:current');
-    }
-}

@@ -9,6 +9,9 @@
  * wormhole.ajax({url: url, type: type, data: pass_data, dataType: 'json', contentType: 'application/json', successFunction: successFunction, failFunction: failFunction});
  * ```
  * @requires porthole.js
+ * @version 1.0
+ * @copyright nerdeez.com
+ * @author Yariv Katz
  */
 
 //create the namespace if the namespace doesnt exist

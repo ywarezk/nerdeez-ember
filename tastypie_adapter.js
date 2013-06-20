@@ -107,6 +107,22 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	 * if not set the default ajax will be set
 	 */
 	wormhole: null,
+	
+	/**
+	 * hook to set the loading function to call when ajax starts
+	 * @type {Function}
+	 * @property
+	 * @public 
+	 */
+	loadingFunction: null,
+	
+	/**
+	 * hook to set the stop loading function to call when ajax finishes
+	 * @type {Function}
+	 * @property
+	 * @public 
+	 */
+	stopLoadingFunction: null,
 
 	/**
 	 * @private
@@ -160,7 +176,19 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	        	this._super(url, type, hash);
         }
         else{
-	        this.get('wormhole').ajax({url: url, type: type, data: pass_data, dataType: 'json', contentType: 'application/json', successFunction: hash.success, failFunction: hash.error});	
+	        	if(this.get('loadingFunction') != null && this.get('stopLoadingFunction') != null)
+		        	this.get('loadingFunction')();
+	        this.get('wormhole').ajax(
+		        	{
+		        		url: url, 
+		        		type: type, 
+		        		data: pass_data, 
+		        		dataType: 'json', 
+		        		contentType: 'application/json', 
+		        		successFunction: hash.success, 
+		        		failFunction: hash.error, 
+		        		alwaysFunction: this.get('stopLoadingFunction')
+		        	});	
         }
     },
 

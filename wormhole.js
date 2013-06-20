@@ -82,6 +82,14 @@ Nerdeez.Wormhole = Ember.Object.extend({
     failFunction: {},
     
     /**
+     * holds the ajax always function
+     * @property
+     * @private
+     * @type Object
+     */
+    alwaysFunction: {},
+    
+    /**
      * holds the server url
      * set this property to change the default connection url
      * @property
@@ -140,6 +148,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
         this.deferreds[requestId] = deferred;
         this.successFunction[requestId] = params.successFunction;
         this.failFunction[requestId] = params.failFunction;
+        this.alwaysFunction[requestId] = params.alwaysFunction;
         var request = {requestId: requestId, params: params};
         if (this.linked) {
             this.sendRequest(request);
@@ -193,6 +202,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
             //alert('Communication error');
             this.failFunction[data.requestId](data.data, {status: 500, responseText: 'Server error'});
         }
+        this.alwaysFunction[data.requestId]();
     }
 });
 

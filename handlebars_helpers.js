@@ -1,42 +1,134 @@
-/*var getPath = Ember.Handlebars.getPath;
-Ember.Handlebars.registerHelper('everyNth', function(label, every, options) {
-	var context = (options.fn.contexts && options.fn.contexts[0]) || this;
-	var val1 = getPath(context, label, options.fn);
-	//var val2 = getPath(context, val2, options.fn);
-	var fn = options.fn, inverse = options.inverse;
-	var ret = "";
-	if(val1 && val1.get('length') > 0) {
-	    for(var i=0, j=val1.get('length'); i<j; i++) {
-			var modZero = i % every === 0;
-		    ret = ret + fn(_.extend({}, context[i], {
-		        isModZero: modZero,
-		        isModZeroNotFirst: modZero && i > 0,
-		        isLast: i === val1.get('length') - 1
-		    }));
-	    }
-	} else {
-	    ret = inverse(this);
-	}
-	return ret;
+/**
+ * put this in each handlebar block to see if this is not the first item of the array
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{#each controller}}
+ *    {{notFirst this controller.content html="<div>Not the fist item in array</div>"}}
+ * {{/each}}
+ * ```
+ * 
+ * @param {DS.Model} item teh object to check in the each
+ * @param {DS.RecordArray} array - the arrays of objects to check from
+ * @param {Object} options {html: "the html if this is true"}
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) {
+  firstObject = array.objectAt(0);
+  if(item != firstObject){
+	  	return new Ember.Handlebars.SafeString(options.hash.html);
+  }
+  return '';
 });
 
-/*Ember.Handlebars.registerBoundHelper('everyNth', function(label, every, options) {
-  var options = Array.prototype.pop.call(arguments);
-  var string = options.data.properties[1];
-  return (count > 1 ? string+"s" : string);
-});*/
+/**
+ * put this in each handlebar block to check every time you reached the nth item 
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{#each controller}}
+ *    {{modZero this controller.content mod="4" html='<div class="row-fluid">'}}
+ * {{/each}}
+ * ```
+ * 
+ * @param {DS.Model} item teh object to check in the each
+ * @param {DS.RecordArray} array - the arrays of objects to check from
+ * @param {Object} options {html: "the html if this is true", mod: "4"}
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('modZero', function(item, array, options) {
+	console.log('modZero');
+	var whichItem = 0;
+	mod = options.hash.mod;
+	for(var i=0; i<array.get('length'); i++){
+		currentObject = array.objectAt(i);
+		if(item == currentObject){
+			whichItem = i;
+		}
+	}
+	if(whichItem%mod == 0){
+		return new Ember.Handlebars.SafeString(options.hash.html);
+	}
+	return '';
+});
 
-WorkerimClient.registerViewHelper('everyNth', Ember.View.extend({
-  tagName: 'span',
+/**
+ * put this in each handlebar block to check every time you reached the nth item but if zero then ignore
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{#each controller}}
+ *    {{modZero this controller.content mod="4" html='<div class="row-fluid">'}}
+ * {{/each}}
+ * ```
+ * 
+ * @param {DS.Model} item teh object to check in the each
+ * @param {DS.RecordArray} array - the arrays of objects to check from
+ * @param {Object} options {html: "the html if this is true", mod: "4"}
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array, options) {
+	console.log('modZero');
+	var whichItem = 0;
+	mod = options.hash.mod;
+	for(var i=0; i<array.get('length'); i++){
+		currentObject = array.objectAt(i);
+		if(item == currentObject){
+			whichItem = i;
+		}
+	}
+	if(whichItem%mod == 0 && whichItem != 0){
+		return new Ember.Handlebars.SafeString(options.hash.html);
+	}
+	return '';
+});
 
-  template: Ember.Handlebars.compile('{{view.formattedContent}}'),
+/**
+ * put this in each handlebar block to check every time you reached the last item 
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{#each controller}}
+ *    {{isLast this controller.content html="</div>"}}
+ * {{/each}}
+ * ```
+ * 
+ * @param {DS.Model} item teh object to check in the each
+ * @param {DS.RecordArray} array - the arrays of objects to check from
+ * @param {Object} options {html: "the html if this is true"}
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
+	if(item == array.objectAt(array.get('length')) - 1){
+		return new Ember.Handlebars.SafeString(options.hash.html);
+	}
+	return '';	
+});
 
-  formattedContent: (function() {
-    var content = this.get('content');
-
-    if (content != null) {
-      // Capitalize `content`.
-      return content.charAt(0).toUpperCase() + content.slice(1);
-    }
-  }).property('content')
-}));
+/**
+ * put this in each handlebar block to check every time you're in the first item 
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{#each controller}}
+ *    {{isFirst this controller.content html="<div>The first item of an array</div>"}}
+ * {{/each}}
+ * ```
+ * 
+ * @param {DS.Model} item teh object to check in the each
+ * @param {DS.RecordArray} array - the arrays of objects to check from
+ * @param {Object} options {html: "the html if this is true"}
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('isFirst', function(item, array, options) {
+	firstObject = array.objectAt(0);
+	if(item == firstObject){
+		  	return new Ember.Handlebars.SafeString(options.hash.html);
+	}
+	return '';
+});

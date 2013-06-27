@@ -17,6 +17,7 @@
 Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) {
   firstObject = array.objectAt(0);
   if(item != firstObject){
+	  	console.log('notFirst');
 	  	return new Ember.Handlebars.SafeString(options.hash.html);
   }
   return '';
@@ -39,7 +40,6 @@ Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) 
  * @return {Handlebars.SafeString}
  */
 Ember.Handlebars.registerBoundHelper('modZero', function(item, array, options) {
-	console.log('modZero');
 	var whichItem = 0;
 	mod = options.hash.mod;
 	for(var i=0; i<array.get('length'); i++){
@@ -49,6 +49,7 @@ Ember.Handlebars.registerBoundHelper('modZero', function(item, array, options) {
 		}
 	}
 	if(whichItem%mod == 0){
+		console.log('modZero');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';
@@ -71,7 +72,6 @@ Ember.Handlebars.registerBoundHelper('modZero', function(item, array, options) {
  * @return {Handlebars.SafeString}
  */
 Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array, options) {
-	console.log('modZeroExcludeFirst');
 	var whichItem = 0;
 	mod = options.hash.mod;
 	for(var i=0; i<array.get('length'); i++){
@@ -81,6 +81,7 @@ Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array
 		}
 	}
 	if(whichItem%mod == 0 && whichItem != 0){
+		console.log('modZeroExcludeFirst');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';
@@ -103,8 +104,8 @@ Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array
  * @return {Handlebars.SafeString}
  */
 Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
-	console.log('isLast');
-	if(item == array.objectAt(array.get('length') - 1)){
+	if(item == array.objectAt(array.get('length') - 1) && array.get('isUpdating') == false){
+		console.log('isLast');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';	
@@ -127,10 +128,10 @@ Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
  * @return {Handlebars.SafeString}
  */
 Ember.Handlebars.registerBoundHelper('isFirst', function(item, array, options) {
-	console.log('isFirst');
 	firstObject = array.objectAt(0);
 	if(item == firstObject){
-		  	return new Ember.Handlebars.SafeString(options.hash.html);
+		console.log('isFirst');
+		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';
 });

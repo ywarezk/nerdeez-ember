@@ -106,7 +106,6 @@ Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array
 Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
 	if(item == array.objectAt(array.get('length') - 1) && array.get('isUpdating') == false){
 		console.log('isLast');
-		options.data.view._parentView.get('lastLoaded');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';	

@@ -194,12 +194,14 @@ Nerdeez.Wormhole = Ember.Object.extend({
     onResponse: function(data) {
         var deferred = this.deferreds[data.requestId];
         delete this.deferreds[data.requestId];
+        
         if (data.success) {
             deferred.resolve(data.data, data.textStatus);
             this.successFunction[data.requestId](data.data);
         } else {
             deferred.reject(data.textStatus, data.errorThrown);
             //alert('Communication error');
+            this.alwaysFunction[data.requestId]();
             this.failFunction[data.requestId]({status: 500, responseText: 'Server error'});
         }
         this.alwaysFunction[data.requestId]();

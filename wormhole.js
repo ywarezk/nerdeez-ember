@@ -200,7 +200,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
         } else {
             deferred.reject(data.textStatus, data.errorThrown);
             //alert('Communication error');
-            this.failFunction[data.requestId](data.data, {status: 500, responseText: 'Server error'});
+            this.failFunction[data.requestId]({status: 500, responseText: 'Server error'});
         }
         this.alwaysFunction[data.requestId]();
     }

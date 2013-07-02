@@ -115,8 +115,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
         var target = "wormhole_iframe";
         this.iframe = $('<iframe id="' + target +
             '" name="' + target +
-            //'" src="' + WorkerimClient.server_url +
-            '" src="' + NerdeezFrontend.server_url +
+            '" src="' + this.get('serverUrl') +
             '" style="width: 0; height: 0; border: none; display: none;"></iframe>');
             $('body').append(this.iframe);
             

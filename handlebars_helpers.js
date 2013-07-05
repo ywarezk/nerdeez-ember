@@ -17,7 +17,7 @@
 Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) {
   firstObject = array.objectAt(0);
   if(item != firstObject){
-	  	console.log('notFirst');
+	  	//console.log('notFirst');
 	  	return new Ember.Handlebars.SafeString(options.hash.html);
   }
   return '';
@@ -49,7 +49,7 @@ Ember.Handlebars.registerBoundHelper('modZero', function(item, array, options) {
 		}
 	}
 	if(whichItem%mod == 0){
-		console.log('modZero');
+		//console.log('modZero');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';
@@ -81,7 +81,7 @@ Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array
 		}
 	}
 	if(whichItem%mod == 0 && whichItem != 0){
-		console.log('modZeroExcludeFirst');
+		//console.log('modZeroExcludeFirst');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';
@@ -105,7 +105,7 @@ Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array
  */
 Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
 	if(item == array.objectAt(array.get('length') - 1) && array.get('isUpdating') == false){
-		console.log('isLast');
+		//console.log('isLast');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';	
@@ -130,7 +130,7 @@ Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
 Ember.Handlebars.registerBoundHelper('isFirst', function(item, array, options) {
 	firstObject = array.objectAt(0);
 	if(item == firstObject){
-		console.log('isFirst');
+		//console.log('isFirst');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';

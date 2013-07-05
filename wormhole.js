@@ -167,7 +167,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
             this.windowProxy.post(JSON.stringify(request));
         }
         catch(err){
-            console.log(err);
+            //console.log(err);
         }
     },
  

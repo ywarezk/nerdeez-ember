@@ -27,8 +27,12 @@
 var get = Ember.get, set = Ember.set;
 
 //create the namespace if the namespace doesnt exist
-if (typeof Nerdeez === "undefined")
+if (typeof window.Nerdeez === "undefined"){
 	var Nerdeez = Ember.Namespace.create();
+}
+else{
+	var Nerdeez = window.Nerdeez;
+}
 
 /**
  * this class knows how to handle with the json response of a django-tastypie server

@@ -26,8 +26,12 @@
 var get = Ember.get, set = Ember.set;
 
 //create the namespace if the namespace doesnt exist
-if (typeof Nerdeez === "undefined")
+if (typeof window.Nerdeez === "undefined"){
 	var Nerdeez = Ember.Namespace.create();
+}
+else{
+	var Nerdeez = window.Nerdeez;
+}
 
 /**
  * extending the rest adapter - this will create an adapter for django - tastypie

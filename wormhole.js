@@ -15,8 +15,12 @@
  */
 
 //create the namespace if the namespace doesnt exist
-if (typeof Nerdeez === "undefined")
+if (typeof window.Nerdeez === "undefined"){
 	var Nerdeez = Ember.Namespace.create();
+}
+else{
+	var Nerdeez = window.Nerdeez;
+}
 
 /**
  * using porthole.js this will be used to create crossdomain ajax communications using iframes

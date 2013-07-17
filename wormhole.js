@@ -132,7 +132,9 @@ Nerdeez.Wormhole = Ember.Object.extend({
             var data = $.parseJSON(message.data);
             switch (data.type) {
                 case "ready": return self.onReady(data);
-                case "response": return self.onResponse(data);
+                case "response":
+	                console.log('test response'); 
+	                return self.onResponse(data);
                 default: throw Error("unknown message type: " + data.type);
             }
         });
@@ -171,7 +173,7 @@ Nerdeez.Wormhole = Ember.Object.extend({
             this.windowProxy.post(JSON.stringify(request));
         }
         catch(err){
-            //console.log(err);
+            console.log(err);
         }
     },
  
@@ -200,13 +202,13 @@ Nerdeez.Wormhole = Ember.Object.extend({
         delete this.deferreds[data.requestId];
         
         if (data.success) {
-            deferred.resolve(data.data, data.textStatus);
-            this.successFunction[data.requestId](data.data);
+            deferred.resolve(data.data.hash, data.textStatus);
+            this.successFunction[data.requestId](data.data.hash);
         } else {
-            deferred.reject(data.textStatus, data.errorThrown);
+            deferred.reject(data.data.textStatus, data.errorThrown);
             //alert('Communication error');
             this.alwaysFunction[data.requestId]();
-            this.failFunction[data.requestId]({status: 500, responseText: 'Server error'});
+            this.failFunction[data.requestId]({status: data.data.jqXHR.status, responseText: data.data.jqXHR.responseText});
         }
         this.alwaysFunction[data.requestId]();
     }

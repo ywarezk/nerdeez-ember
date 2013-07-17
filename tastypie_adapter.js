@@ -431,5 +431,24 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
                 });
             }
         });
-    }
+    },
+    
+    /**
+     * will handle the error
+     * 
+	 * @param {DS.Store} application store
+	 * @param {submodule of DS.Model} type the class we are performing the action on
+	 * @param {Object} record the problematic record
+	 * @param {Object} xhr json response from the server
+     */
+    didError: function(store, type, record, xhr){
+	    	//var json = JSON.parse(xhr.responseText),
+	    	//var json = xhr;
+		//var serializer = this.get('serializer');
+		//errors = serializer.extractValidationErrors(type, json);
+		//errors = {error: json.responseText}
+		record.set('errors', xhr.responseText);
+		store.recordWasError(record);
+		//this._super(store, type, record, xhr);
+    },
 });

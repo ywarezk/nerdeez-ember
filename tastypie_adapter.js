@@ -382,10 +382,8 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	    this.ajax(this.buildURL(root), "GET", {
 	        data: null,
 	        success: function(json) {
-	            Ember.run(this, function(){
 	                xthis.didFindAll(store, type, json);
 	                
-	            });
 	        }
 	    });
 	},
@@ -406,9 +404,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         this.ajax(this.buildURL(root), "GET", {
             data: data,
             success: function(json) {
-                Ember.run(this, function(){
                     xthis.didFindQuery(store, type, json, recordArray);
-                });
             }
         });
     },
@@ -426,9 +422,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         xthis = this;
         this.ajax(this.buildURL(root, id), "GET", {
             success: function(json) {
-                Ember.run(this, function(){
                     xthis.didFindRecord(store, type, json, id);
-                });
             }
         });
     },

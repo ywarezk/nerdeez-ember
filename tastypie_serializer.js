@@ -28,7 +28,7 @@ var get = Ember.get, set = Ember.set;
 
 //create the namespace if the namespace doesnt exist
 if (typeof window.Nerdeez === "undefined"){
-	var Nerdeez = Ember.Namespace.create();
+	var Nerdeez = window.Nerdeez = Ember.Namespace.create();
 }
 else{
 	var Nerdeez = window.Nerdeez;

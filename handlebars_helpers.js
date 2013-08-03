@@ -17,7 +17,7 @@
 Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) {
   firstObject = array.objectAt(0);
   if(item != firstObject){
-	  	//console.log('notFirst');
+      	//console.log('notFirst');
 	  	return new Ember.Handlebars.SafeString(options.hash.html);
   }
   return '';
@@ -134,4 +134,63 @@ Ember.Handlebars.registerBoundHelper('isFirst', function(item, array, options) {
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';
+});
+
+/**
+ * put this in each handlebar block usually before the end of the form element
+ * to return the status from the form submition
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{status controller messageBinding="message" isSuccessBinding="isSuccess" isShowBinding="isShowStatus"}}
+ * ```
+ * 
+ * the above will create a status info bind it to the controller and in the controller bind the properties: message, isSuccess, isShowStatus
+ * 
+ * @param {Ember.Object} the item which is bounded to the status paramaters
+ * @param {Object} options inside the hash we have {isShow: "true if need to show the status", isSuccess: "true if its a success status", message: 'the message to display'}
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('status', function(item, options) {
+    var isShow = options.hash.isShow;
+    var isSuccess = options.hash.isSuccess;
+    var message = options.hash.message;
+    var html = '';
+    if(isShow){
+        var html = '<div class="info">';
+        if(isSuccess){
+            html+='<div class="alert alert-success"><i class="icon-ok"></i>' + message + '</div>';
+        }
+        else{
+            html+='<div class="alert alert-danger"><i class="icon-remove"></i>' + message + '</div>';
+        }
+        html+='</div>';
+    }
+    return new Handlebars.SafeString(html);
+});
+
+/**
+ * 
+ * will put a loading roller and bind it to what is sent to the handlebar
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{loading controller isLoadingBinding="isLoading"}}
+ * ```
+ * 
+ * the above will bind the loading screen to the controller isLoading property
+ * 
+ * @param {Ember.Object} the item which is bounded to the status paramaters
+ * @param {Object} options inside the hash we have {isLoading: "true if need to show the loading"}
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('loading', function(item, options) {
+    var isLoading = options.hash.isLoading;
+    var html = '';
+    if(isLoading){
+        var html = '<div class="loading"><i class="icon-spin icon-spinner"></i></div>';
+    }
+    return new Handlebars.SafeString(html);
 });

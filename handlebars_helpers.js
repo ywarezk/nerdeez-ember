@@ -19,7 +19,7 @@ var Ember = window.Ember;
 Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) {
   var firstObject = array.objectAt(0);
   if(item != firstObject){
-      	return new Ember.Handlebars.SafeString(options.hash.html);
+          return new Ember.Handlebars.SafeString(options.hash.html);
   }
   return '';
 });
@@ -210,9 +210,16 @@ Ember.Handlebars.registerBoundHelper('loading', function(item, options) {
  * @param {number|string} v2 the second variable
  * @return {Handlebars.SafeString}
  */
-Ember.Handlebars.registerBoundHelper('ifCond', function(v1, v2, options) {
-  if(v1 === v2) {
-    return options.fn(this);
-  }
-  return options.inverse(this);
+Ember.Handlebars.registerHelper('ifCond', function(v1, v2, options) {
+    if (Ember.typeOf(v2) === "string"){    
+        if(this.get(v1) == v2 || this.get(v1) == this.get(v2)) {
+            return options.fn(this);
+        }
+    }
+    else{
+        if(this.get(v1) == v2) {
+            return options.fn(this);
+        }
+    }
+    return options.inverse(this);
 });

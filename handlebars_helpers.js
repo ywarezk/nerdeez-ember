@@ -1,3 +1,5 @@
+var Ember = window.Ember;
+
 /**
  * put this in each handlebar block to see if this is not the first item of the array
  * 
@@ -15,10 +17,9 @@
  * @return {Handlebars.SafeString}
  */
 Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) {
-  firstObject = array.objectAt(0);
+  var firstObject = array.objectAt(0);
   if(item != firstObject){
-      	//console.log('notFirst');
-	  	return new Ember.Handlebars.SafeString(options.hash.html);
+      	return new Ember.Handlebars.SafeString(options.hash.html);
   }
   return '';
 });
@@ -41,15 +42,14 @@ Ember.Handlebars.registerBoundHelper('notFirst', function(item, array, options) 
  */
 Ember.Handlebars.registerBoundHelper('modZero', function(item, array, options) {
 	var whichItem = 0;
-	mod = options.hash.mod;
+	var mod = options.hash.mod;
 	for(var i=0; i<array.get('length'); i++){
-		currentObject = array.objectAt(i);
+		var currentObject = array.objectAt(i);
 		if(item == currentObject){
 			whichItem = i;
 		}
 	}
 	if(whichItem%mod == 0){
-		//console.log('modZero');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';
@@ -73,9 +73,9 @@ Ember.Handlebars.registerBoundHelper('modZero', function(item, array, options) {
  */
 Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array, options) {
 	var whichItem = 0;
-	mod = options.hash.mod;
+	var mod = options.hash.mod;
 	for(var i=0; i<array.get('length'); i++){
-		currentObject = array.objectAt(i);
+		var currentObject = array.objectAt(i);
 		if(item == currentObject){
 			whichItem = i;
 		}
@@ -105,7 +105,6 @@ Ember.Handlebars.registerBoundHelper('modZeroExcludeFirst', function(item, array
  */
 Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
 	if(item == array.objectAt(array.get('length') - 1) && array.get('isUpdating') == false){
-		//console.log('isLast');
 		return new Ember.Handlebars.SafeString(options.hash.html);
 	}
 	return '';	
@@ -128,7 +127,7 @@ Ember.Handlebars.registerBoundHelper('isLast', function(item, array, options) {
  * @return {Handlebars.SafeString}
  */
 Ember.Handlebars.registerBoundHelper('isFirst', function(item, array, options) {
-	firstObject = array.objectAt(0);
+	var firstObject = array.objectAt(0);
 	if(item == firstObject){
 		//console.log('isFirst');
 		return new Ember.Handlebars.SafeString(options.hash.html);
@@ -158,7 +157,7 @@ Ember.Handlebars.registerBoundHelper('status', function(item, options) {
     var message = options.hash.message;
     var html = '';
     if(isShow){
-        var html = '<div class="info">';
+        html = '<div class="info">';
         if(isSuccess){
             html+='<div class="alert alert-success"><i class="icon-ok"></i>' + message + '</div>';
         }
@@ -190,7 +189,30 @@ Ember.Handlebars.registerBoundHelper('loading', function(item, options) {
     var isLoading = options.hash.isLoading;
     var html = '';
     if(isLoading){
-        var html = '<div class="loading"><i class="icon-spin icon-spinner"></i></div>';
+        html = '<div class="loading"><i class="icon-spin icon-spinner"></i></div>';
     }
     return new Handlebars.SafeString(html);
+});
+
+/**
+ * 
+ * will check if 2 vars are equal
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{#ifCond v1 v2}}
+ * {{/ifCond}}
+ * ```
+ * 
+ * 
+ * @param {number|string} v1 the first variable
+ * @param {number|string} v2 the second variable
+ * @return {Handlebars.SafeString}
+ */
+Ember.Handlebars.registerBoundHelper('ifCond', function(v1, v2, options) {
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
 });

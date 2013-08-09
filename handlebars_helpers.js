@@ -159,10 +159,10 @@ Ember.Handlebars.registerBoundHelper('status', function(item, options) {
     if(isShow){
         html = '<div class="info">';
         if(isSuccess){
-            html+='<div class="alert alert-success"><i class="icon-ok"></i>' + message + '</div>';
+            html+='<div class="alert alert-success"><i class="icon-ok"></i>' + message + '<a class="close" data-dismiss="alert">x</a></div>';
         }
         else{
-            html+='<div class="alert alert-danger"><i class="icon-remove"></i>' + message + '</div>';
+            html+='<div class="alert alert-danger"><i class="icon-remove"></i>' + message + '<a class="close" data-dismiss="alert">x</a></div>';
         }
         html+='</div>';
     }

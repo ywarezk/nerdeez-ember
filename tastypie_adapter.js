@@ -177,12 +177,12 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         
         //call wormhole ajax or super ajax if wormhole not set
         if(this.get('wormhole') == null){
-	        	this._super(url, type, hash);
+	        	return this._super(url, type, hash);
         }
         else{
 	        	if(this.get('loadingFunction') != null && this.get('stopLoadingFunction') != null)
 		        	this.get('loadingFunction')();
-	        this.get('wormhole').ajax(
+	        return this.get('wormhole').ajax(
 		        	{
 		        		url: url, 
 		        		type: type, 

@@ -213,6 +213,9 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 		      data: data,
 		      success: function(json) {
 		        xthis.didCreateRecord(store, type, record, json);
+		        if(record.get('id') == null){
+			        	record.set('id', json.id);
+		        }
 		      },
 		      error: function(xhr){
 		      	xthis.didError(store, type, record, xhr);

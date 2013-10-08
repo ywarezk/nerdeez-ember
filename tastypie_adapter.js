@@ -212,10 +212,10 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	    this.ajax(this.buildURL(root), "POST", {
 		      data: data,
 		      success: function(json) {
-		        xthis.didCreateRecord(store, type, record, json);
-		        if(record.get('id') == null){
+		      	if(record.get('id') == null){
 			        	record.set('id', json.id);
 		        }
+		        xthis.didCreateRecord(store, type, record, json);
 		      },
 		      error: function(xhr){
 		      	xthis.didError(store, type, record, xhr);

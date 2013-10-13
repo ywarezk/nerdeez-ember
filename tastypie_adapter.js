@@ -163,7 +163,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
     ajax: function (url, type, hash) {
     	
 		// if the api key and username are set then append them to url	    	
-        if(this.get('apiKey') != null && this.get('username') != null && type.toLowerCase() == "get"){
+        if(this.get('apiKey') != null && this.get('username') != null && (type.toLowerCase() == "get" || type.toLowerCase() == "delete")){
             var api_key = this.get('apiKey');
             var username = this.get('username');
             var url = url + '?username=' + username + '&api_key=' + api_key;
@@ -172,8 +172,10 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         //if its post put request then prepare the data
         pass_data = hash.data;
         if (type.toLowerCase() == "post" || type.toLowerCase() == "put"){
+        	if(this.get('username') != null && this.get('apiKey') != null){
 	        	hash.data['username'] = this.get('username');
 	        	hash.data['api_key'] = this.get('apiKey');
+	        }
             pass_data = JSON.stringify(hash.data);
         }
         

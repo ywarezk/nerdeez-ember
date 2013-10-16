@@ -247,3 +247,87 @@ Nerdeez.Share = Ember.Mixin.create({
     }
   }
 });
+
+/**
+ This mixin allows for controllers to pass status messages and loading
+
+ 
+ Example Usage (default values):
+
+ ''''javascript
+
+ App.myController = Ember.Controller.extend(Nerdeez.Status,{ ... });
+
+ ''''handlebars
+
+ {{#if isSuccess}}
+	 ...
+	 {{statusMessage}}
+ {{/if}}
+ 
+ {{#if isError}}
+	 ...
+	 {{statusMessage}}
+ {{/if}}
+ 
+ {{#if isLoading}}
+	 ...
+ {{/if}}
+
+ ''''
+
+**/
+
+/**
+  @class Nerdeez.Share
+  @extends Ember.Mixin
+  @namespace Nerdeez
+  @module Nerdeez
+**/
+Nerdeez.Status = Ember.Mixin.create({
+	/**
+	 * if set to true will display the success alert
+	 * @type {Boolean}
+	 */
+	isSuccess: false,
+	
+	/**
+	 * if set to true will display the danger alert
+	 * @type {Boolean}
+	 */
+	isError: false,
+	
+	/**
+	 * if set to true will display the loading screen
+	 * @type {Boolean}
+	 */
+	isLoading: false,
+	
+	/**
+	 * will display a message in the alerts
+	 * @type {String}
+	 */
+	statusMessage: null,
+	
+	/**
+	 * will display an error
+	 * @param {String} message - the message to display
+	 */
+	error: function(message){
+		this.set('isError', true);
+		this.set('isSuccess', false);
+		this.set('isLoading', false);
+		this.set('statusMessage', message);
+	},
+	
+	/**
+	 * will display an success
+	 * @param {String} message - the message to display
+	 */
+	success: function(message){
+		this.set('isError', false);
+		this.set('isSuccess', true);
+		this.set('isLoading', false);
+		this.set('statusMessage', message);
+	},
+});

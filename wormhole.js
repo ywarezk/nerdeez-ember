@@ -208,7 +208,13 @@ Nerdeez.Wormhole = Ember.Object.extend({
             deferred.reject(data.data.textStatus, data.errorThrown);
             //alert('Communication error');
             this.alwaysFunction[data.requestId]();
-            this.failFunction[data.requestId]({status: data.data.jqXHR.status, responseText: data.data.jqXHR.responseText});
+            try{
+	            this.failFunction[data.requestId]({status: data.data.jqXHR.status, responseText: data.data.jqXHR.responseText});	
+            }
+            catch(e){
+	            console.log('wormhole failed to run the failed funciton');
+            }
+            
         }
         this.alwaysFunction[data.requestId]();
     }

@@ -391,7 +391,8 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	        success: function(json) {
 	                xthis.didFindAll(store, type, json);
 	                
-	        }
+	        },
+	        error: DS.rejectionHandler
 	    });
 	},
 
@@ -412,7 +413,8 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
             data: data,
             success: function(json) {
                     xthis.didFindQuery(store, type, json, recordArray);
-            }
+            },
+            error: DS.rejectionHandler
         });
     },
     
@@ -430,7 +432,8 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         this.ajax(this.buildURL(root, id), "GET", {
             success: function(json) {
                     xthis.didFindRecord(store, type, json, id);
-            }
+            },
+            error: DS.rejectionHandler
         });
     },
     

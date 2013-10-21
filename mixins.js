@@ -330,4 +330,11 @@ Nerdeez.Status = Ember.Mixin.create({
 		this.set('isLoading', false);
 		this.set('statusMessage', message);
 	},
+	
+	/**
+	 * put the loading screen on
+	 */
+	loading: function(){
+		this.set('isLoading', true);
+	}
 });

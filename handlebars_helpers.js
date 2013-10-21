@@ -185,13 +185,16 @@ Ember.Handlebars.registerBoundHelper('status', function(item, options) {
  * @param {Object} options inside the hash we have {isLoading: "true if need to show the loading"}
  * @return {Handlebars.SafeString}
  */
-Ember.Handlebars.registerBoundHelper('loading', function(item, options) {
-    var isLoading = options.hash.isLoading;
-    var html = '';
-    if(isLoading){
-        html = '<div class="loading"><i class="icon-spin icon-spinner"></i></div>';
-    }
-    return new Handlebars.SafeString(html);
+// Ember.Handlebars.registerBoundHelper('loading', function(item, options) {
+    // var isLoading = options.hash.isLoading;
+    // var html = '';
+    // if(isLoading){
+        // html = '<div class="loading"><i class="icon-spin icon-spinner"></i></div>';
+    // }
+    // return new Handlebars.SafeString(html);
+// });
+Ember.Handlebars.registerBoundHelper('loading', function() {
+    return new Ember.Handlebars.SafeString('<div class="loading"><i class="icon-refresh icon-spin"></i></div>');
 });
 
 /**

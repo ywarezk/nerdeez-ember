@@ -170,42 +170,42 @@ Nerdeez.Share = Ember.Mixin.create({
   * @public
   * @type {string}
   */
-  method: 'feed',
+  shareMethod: 'feed',
   /**
   * the dialog title
   * @property
   * @public
   * @type {string}
   */
-  name: 'Nerdeez',
+  shareName: 'Nerdeez',
   /**
   * dialog caption
   * @property
   * @public
   * @type {string}
   */
-  caption: 'Nerdeez - Doing homework together',
+  shareCaption: 'Nerdeez - Doing homework together',
   /**
   * dialog description
   * @property
   * @public
   * @type {string}
   */
-  description: "",
+  shareDescription: "",
   /**
   * dialog link
   * @property
   * @public
   * @type {string}
   */
-  link: window.location.href,
+  shareLink: window.location.href,
   /**
   * dialog image
   * @property
   * @public
   * @type {string}
   */
-  picture: 'https://s3-eu-west-1.amazonaws.com/nerdeez-public/nerdeez-logo.png',
+  sharePicture: 'https://s3-eu-west-1.amazonaws.com/nerdeez-public/nerdeez-logo.png',
 
   /**
     Init function, empty by default.
@@ -229,18 +229,18 @@ Nerdeez.Share = Ember.Mixin.create({
       var xthis = this;
       FB.ui(
       {
-        method: xthis.get('method'),
-        name: xthis.get('name'),
-        caption: xthis.get('caption'),
-        description: xthis.get('description'),
-        link: xthis.get('link'),
-        picture: xthis.get('picture')
+        method: xthis.get('shareMethod'),
+        name: xthis.get('shareName'),
+        caption: xthis.get('shareCaption'),
+        description: xthis.get('shareDescription'),
+        link: xthis.get('shareLink'),
+        picture: xthis.get('sharePicture')
       },
         function(response) {
           if (response && response.post_id) {
-              alert('Post was published.');
+              //alert('Post was published.');
           } else {
-              alert('Post was not published.');
+              //alert('Post was not published.');
           }
         }
       );

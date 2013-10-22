@@ -55,7 +55,7 @@
 
 //create the namespace if the namespace doesnt exist
 if (typeof window.Nerdeez === "undefined"){
-	var Nerdeez = Ember.Namespace.create();
+	var Nerdeez = window.Nerdeez = Ember.Namespace.create();
 }
 else{
 	var Nerdeez = window.Nerdeez;
@@ -330,4 +330,11 @@ Nerdeez.Status = Ember.Mixin.create({
 		this.set('isLoading', false);
 		this.set('statusMessage', message);
 	},
+	
+	/**
+	 * put the loading screen on
+	 */
+	loading: function(){
+		this.set('isLoading', true);
+	}
 });

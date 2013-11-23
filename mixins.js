@@ -336,5 +336,5 @@ Nerdeez.Status = Ember.Mixin.create({
 	 */
 	loading: function(){
 		this.set('isLoading', true);
-	}
+	}  
 });

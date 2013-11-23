@@ -160,8 +160,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
      * @param {Object} hash {data: {holds the dicionary to post}, success: {holds success function}, error: {holds the error function}}
      * @return void
      */
-    ajax: function (url, type, hash) {
-    	
+    ajax: function (url, type, hash) {    	
 		// if the api key and username are set then append them to url	    	
         if(this.get('apiKey') != null && this.get('username') != null && (type.toLowerCase() == "get" || type.toLowerCase() == "delete")){
             var api_key = this.get('apiKey');
@@ -171,6 +170,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         
         //if its post put request then prepare the data
         pass_data = hash.data;
+
         if (type.toLowerCase() == "post" || type.toLowerCase() == "put"){
         	if(this.get('username') != null && this.get('apiKey') != null){
 	        	hash.data['username'] = this.get('username');

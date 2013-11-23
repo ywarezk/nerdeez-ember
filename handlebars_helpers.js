@@ -226,3 +226,47 @@ Ember.Handlebars.registerHelper('ifCond', function(v1, v2, options) {
     }
     return options.inverse(this);
 });
+
+/**
+ * 
+ * will format the date
+ *
+ * in order to use this helper you must include 'moment.js' library in your project.
+ *
+ * you can change the language format
+ * by passing a language parameter.
+ *
+ * you can change the format of the date by passing a format 
+ * parameter. 
+ * 
+ * parameters can be found in the library docs at: http://momentjs.com/
+ * 
+ * usage
+ * 
+ * ```handlebars
+ * {{format-date date "L" "he"}}
+ *
+ * ```
+ * where date is object of type Date, "L" - is format type, and "he" - is language (hebrew) 
+ *
+ * another usage example :
+ *
+ * '''handlebars
+ * 
+ * {{format-date date "DD/MM/YY HH:MM" "he"}}
+ *
+ * '''
+ *
+ * note : you don't have to pass the language param, if you're only formatting to 
+ * date which includes only numbers (for example, if you would like to add November, 
+ * you would have to add lang='en')
+ * 
+ * @param {date} date 
+ * @param {string} format
+ * @param {string} lang
+ * @return {string}
+ */
+
+Ember.Handlebars.registerHelper('format-date', function(date,format,lang) {
+    return moment(this.get(date)).lang(lang).format(format);
+});

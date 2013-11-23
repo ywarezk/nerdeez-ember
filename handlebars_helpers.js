@@ -253,7 +253,7 @@ Ember.Handlebars.registerHelper('ifCond', function(v1, v2, options) {
  *
  * '''handlebars
  * 
- * {{format-date date "DD/MM/YY HH:MM" "he"}}
+ * {{format-date date "DD/MM/YY HH:mm" "he"}}
  *
  * '''
  *
@@ -268,5 +268,6 @@ Ember.Handlebars.registerHelper('ifCond', function(v1, v2, options) {
  */
 
 Ember.Handlebars.registerHelper('format-date', function(date,format,lang) {
+    debugger;
     return moment(this.get(date)).lang(lang).format(format);
 });

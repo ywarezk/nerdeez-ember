@@ -61,6 +61,7 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
                 if(xthis.get('paginationTotalResult') != null && xthis.get('paginationController.content.length') >= xthis.get('paginationTotalResult')) return;
                 xthis.set('paginationIsLoading', true);
                 var page = xthis.get('paginationPage');
+                if (page == null) page = 0;
                 var offset = xthis.get('paginationOffset');
                 var model = xthis.get('paginationController.content.type');
                 var controller = xthis.get('paginationController');

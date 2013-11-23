@@ -268,6 +268,5 @@ Ember.Handlebars.registerHelper('ifCond', function(v1, v2, options) {
  */
 
 Ember.Handlebars.registerHelper('format-date', function(date,format,lang) {
-    debugger;
     return moment(this.get(date)).lang(lang).format(format);
 });

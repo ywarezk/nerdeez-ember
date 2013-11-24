@@ -22,19 +22,13 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
      * @type {int}
      */
     paginationPage: 0,
-    
-    /**
-     * default amount in a single page
-     * @type {int}
-     */
-    paginationOffset: 20,
-    
+        
     /**
      * if the pagination is loading then this will be true
      * @type {Boolean}
      */
     paginationIsLoading: false,
-    
+        
     /**
      * the controller that we are changing the content of
      * @type {subclass on Ember.ArrayController}
@@ -62,7 +56,7 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
                 xthis.set('paginationIsLoading', true);
                 var page = xthis.get('paginationPage');
                 if (page == null) page = 0;
-                var offset = xthis.get('paginationOffset');
+                var offset = xthis.get('paginationController.content.query.limit');
                 var model = xthis.get('paginationController.content.type');
                 var controller = xthis.get('paginationController');
                 var content = xthis.get('paginationController.content');
@@ -83,4 +77,6 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
     }
     
     
-})
+});
+
+

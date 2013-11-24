@@ -2,13 +2,12 @@
  * component to add pagination to a page
  * 
  * ```handlebars
- * {{nerdeez-pagination paginationController=this paginationExtraParams=extraParams paginationPage=page paginationTotalResult=resultNum}}
+ * {{nerdeez-pagination paginationController=this paginationExtraParams=extraParams paginationPage=page}}
  * ```
  * 
  * @param paginationController {subclass of Ember.ArrayController} holds the controller that his content will change
  * @param paginationExtraParams {Object} holds an object if you need more elaborate query
  * @param paginationPage {int} bind if you want to controll the page from outside the component
- * @param paginationTotalResult {int} bind to set the controllers total results
  * 
  * Created October 22nd, 2013
  * @author: Yariv Katz
@@ -52,7 +51,9 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
         $(window).scroll(function(e) {
             if (xthis.get('paginationIsLoading')) return;
             if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
-                if(xthis.get('paginationTotalResult') != null && xthis.get('paginationController.content.length') >= xthis.get('paginationTotalResult')) return;
+                //will hold the total number of records of the model
+                var paginationTotalResult = xthis.get('paginationController.content.content.totalCount');
+                if(paginationTotalResult != null && xthis.get('paginationController.content.length') >= paginationTotalResult) return;
                 xthis.set('paginationIsLoading', true);
                 var page = xthis.get('paginationPage');
                 if (page == null) page = 0;

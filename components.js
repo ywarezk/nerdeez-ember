@@ -2,12 +2,10 @@
  * component to add pagination to a page
  * 
  * ```handlebars
- * {{nerdeez-pagination paginationController=this paginationExtraParams=extraParams paginationPage=page}}
+ * {{nerdeez-pagination paginationController=this}}
  * ```
  * 
  * @param paginationController {subclass of Ember.ArrayController} holds the controller that his content will change
- * @param paginationExtraParams {Object} holds an object if you need more elaborate query
- * @param paginationPage {int} bind if you want to controll the page from outside the component
  * 
  * Created October 22nd, 2013
  * @author: Yariv Katz
@@ -20,8 +18,8 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
      * holds the current page we are in
      * @type {int}
      */
-    paginationPage: 0,
-        
+    paginationPage: 0,    
+    
     /**
      * if the pagination is loading then this will be true
      * @type {Boolean}
@@ -33,21 +31,10 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
      * @type {subclass on Ember.ArrayController}
      */
     paginationController: null,
-    
-    /**
-     * need to be binded to the total results
-     * @type {int}
-     */
-    paginationTotalResult: null,
-    
-    /**
-     * if we need to pass extra param to the server query this hook will provide this
-     * @type {Object}
-     */
-    paginationExtraParams: {},
-    
+       
+
     didInsertElement: function(){
-        var xthis = this;
+        var xthis = this;   
         $(window).scroll(function(e) {
             if (xthis.get('paginationIsLoading')) return;
             if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
@@ -61,17 +48,25 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
                 var model = xthis.get('paginationController.content.type');
                 var controller = xthis.get('paginationController');
                 var content = xthis.get('paginationController.content');
-                var extraParams = xthis.get('paginationExtraParams');
+                //init extra params var
+                var extraParams = {};
+                //get extra params from content arrat query
+                for (var property in content.query) {
+                    if (content.query.hasOwnProperty(property)) {
+                        //set extraParams key value pair to match
+                        //the original query
+                        extraParams[property] = content.query[property];
+                    }
+                }
                 page = page + 1;
                 if (extraParams == null) extraParams = {};
-                extraParams['limit'] = offset;
                 extraParams['offset'] = offset * page;
                 xthis.set('paginationPage', page);
                 var newObjects = model.find(extraParams);
                 newObjects.on('didLoad', function(){
-                    xthis.set('paginationIsLoading', false);
                     content.addObjects(this);
                     controller.set('content', content);
+                    xthis.set('paginationIsLoading', false);
                 });
             }
         });

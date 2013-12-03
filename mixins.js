@@ -338,3 +338,41 @@ Nerdeez.Status = Ember.Mixin.create({
 		this.set('isLoading', true);
 	}  
 });
+
+
+/**
+ This mixin handles controllers errors returned from ember rejected promises
+
+ 
+ Example Usage (default values):
+
+ ''''javascript
+
+ App.myController = Ember.Controller.extend(Nerdeez.ErrorHandler,{ ... });
+
+
+ ''''
+
+**/
+
+/**
+  @class Nerdeez.ErrorHandler
+  @extends Ember.Mixin
+  @namespace Nerdeez
+  @module Nerdeez
+**/
+Nerdeez.ErrorHandler = Ember.Mixin.create({
+  
+  /**
+   * will log the error, and will present the user
+   * with the error id - so will be able to report to admin
+   * @param {Ember.Object} error - the error from the rejected promise
+   */
+  errorHandler: function(error){
+    
+    console.log(error.errors);
+    alert ("An error with id:xxx has occured. Please contact System admin with error Id");
+
+  },
+  
+});

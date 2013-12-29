@@ -468,12 +468,10 @@ Nerdeez.FilterContentHandler = Ember.Mixin.create({
       //get the model to filter upon
       //post to the server the filtered query
       model.find(query).then(
-
         //on success
         function(result) {
           xthis.set('content', result);
         },
-
         //on failure
         function(error) {
           console.log(error.errors);

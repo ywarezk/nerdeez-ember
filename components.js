@@ -40,7 +40,7 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
 
     didInsertElement: function(){
         var xthis = this;   
-        $(window).scroll(function(e) {
+        $(window).bind("scroll", function () {
             if (xthis.get('paginationIsLoading')) return;
             if ($(window).scrollTop() >= ($(document).height() - $(window).height())) {
                 //will hold the total number of records of the model
@@ -71,6 +71,10 @@ Nerdeez.NerdeezPaginationComponent = Ember.Component.extend({
                 });
             }
         });
+    },
+
+    willDestroyElement : function() {
+        $(window).unbind("scroll");
     }
     
     

@@ -1,6 +1,6 @@
 /**
 * Global mixins to use with all our ember apps
-* @copyright: nerdeez.com Ltd.
+* @copyright: Nerdeez
 * @version: 1.0
 **/
 
@@ -337,4 +337,147 @@ Nerdeez.Status = Ember.Mixin.create({
 	loading: function(){
 		this.set('isLoading', true);
 	}  
+});
+
+
+/**
+ This mixin handles controllers errors returned from ember rejected promises
+
+ 
+ Example Usage (default values):
+
+ ''''javascript
+
+ App.myController = Ember.Controller.extend(Nerdeez.ErrorHandler,{ ... });
+
+
+ ''''
+
+**/
+
+/**
+  @class Nerdeez.ErrorHandler
+  @extends Ember.Mixin
+  @namespace Nerdeez
+  @module Nerdeez
+**/
+Nerdeez.ErrorHandler = Ember.Mixin.create({
+  
+  /**
+   * will log the error, and will present the user
+   * with the error details
+   * @param {Ember.Object} error - the error from the rejected promise
+   */
+  errorHandler: function(error){
+    
+    console.log(error.errors);
+    alert("An error has occured.\r\n error details : " + error.errors + " \r\nPlease contact System admin with the error details.");
+
+  },
+  
+});
+
+/**
+ This mixin handles filtering content
+
+ 
+ Example Usage (default values):
+
+ ''''javascript
+
+ App.myController = Ember.Controller.extend(Nerdeez.FilterContentHandler,{ ... });
+
+
+ ''''
+
+**/
+
+/**
+  @class Nerdeez.FilterContentHandler
+  @extends Ember.Mixin
+  @namespace Nerdeez
+  @module Nerdeez
+**/
+Nerdeez.FilterContentHandler = Ember.Mixin.create({
+
+  /**
+   * will hold the limit param 
+   * for each query
+   * @type {int}
+   */
+  limit : 20,
+  
+  /**
+    * function will send the server
+    * a filtered query.
+    * function will then set the 'content' object
+    * to the result returned from the server.
+    * @param {Object} - filterParams - an object that will hold
+    * the query params. a propery with values 'All' or null will not
+    * be inserted into the query
+    * @param {extraFilterParams} - an object that will hold
+    * common filter params for all queries.
+    */
+
+    filterContent: function(filterParams,extraFilterParams) {
+
+      var xthis=this;
+
+      //will count filter params which differ from null.
+      //intended to prevent a situation where a unessecary
+      //request is sent to server
+      var notNullFilterParams=0;
+
+      //will hold our final query object
+      var query = {};
+      query['limit'] = this.get('limit');
+
+      //get the extraFilterParams
+      for (var property in extraFilterParams) {
+          if (extraFilterParams.hasOwnProperty(property)) {
+                query[property] = extraFilterParams[property];
+          }
+      }
+
+      //get the business id for the profile
+      query['business_profile'] = Ticketz.auth.get('businessProfile.id');
+
+      //build the query which will send to the server
+        for (var property in filterParams) {
+          if (filterParams.hasOwnProperty(property)) {
+              //if equals "All", it means we want all properties
+              //of the filter, so we won't add the property to
+              //the query
+              if (!Ember.isEmpty(filterParams[property]) && filterParams[property] != "All") {
+                query[property] = filterParams[property];
+                notNullFilterParams++;
+              }
+              else if (filterParams[property] == "All") {
+                notNullFilterParams++;
+              }
+          }
+      }
+
+      //if at least one of the filterParams is not null
+      //then GET from server, else return
+      if (notNullFilterParams ==0) return;
+
+      //set the model for the query
+      var model = this.get('content.type');
+
+      //get the model to filter upon
+      //post to the server the filtered query
+      model.find(query).then(
+        //on success
+        function(result) {
+          xthis.set('content', result);
+        },
+        //on failure
+        function(error) {
+          console.log(error.errors);
+          alert("An error has occured. Please contact System Admin.")
+        });
+
+    }
+  
 });

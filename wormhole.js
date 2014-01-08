@@ -200,7 +200,6 @@ Nerdeez.Wormhole = Ember.Object.extend({
     onResponse: function(data) {
         var deferred = this.deferreds[data.requestId];
         delete this.deferreds[data.requestId];
-        
         if (data.success) {
             deferred.resolve(data.data.hash, data.textStatus);
             this.successFunction[data.requestId](data.data.hash);
@@ -212,7 +211,15 @@ Nerdeez.Wormhole = Ember.Object.extend({
 	            this.failFunction[data.requestId]({status: data.data.jqXHR.status, responseText: data.data.jqXHR.responseText});	
             }
             catch(e){
-	            console.log('wormhole failed to run the failed funciton');
+                
+                //if status is different from 'unauthorized'
+                if (e.status != 401) {
+                    alert("An error Has Occured.\n Error Code:" + e.status +"\n error text: " + e.responseText)
+                    window.open('/#/error',"_self");
+                }
+                else {
+                    window.open('/#/login',"_self");
+                }
             }
             
         }

@@ -147,9 +147,9 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	    set(serializer, 'namespace', namespace);
 	    
 	    //create wormhole instance
-	    wormhole = this.get('wormhole');
+	    /*wormhole = this.get('wormhole');
 	    if(wormhole != null)
-		    this.set('wormhole', wormhole.create({serverUrl: this.get('serverDomain')}));
+		    this.set('wormhole', wormhole.create({serverUrl: this.get('serverDomain')}));*/
 	},
 	
 	/**
@@ -160,7 +160,56 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
      * @param {Object} hash {data: {holds the dicionary to post}, success: {holds success function}, error: {holds the error function}}
      * @return void
      */
-    ajax: function (url, type, hash) {    	
+    /*ajax: function(url, type, hash) {
+
+        var adapter = this;
+        return new Ember.RSVP.Promise(function(resolve, reject) {
+            hash = hash || {};
+            hash.url = url;
+            hash.type = type;
+            hash.dataType = 'json';
+            hash.context = adapter;
+            
+            if(adapter.get('apiKey') != null && adapter.get('username') != null && (type.toLowerCase() == "get" || type.toLowerCase() == "delete")){
+                var api_key = this.get('apiKey');
+                var username = this.get('username');
+                hash.url = url + '?username=' + username + '&api_key=' + api_key;
+            }
+            
+            if (type.toLowerCase() == "post" || type.toLowerCase() == "put"){
+                if(adapter.get('username') != null && adapter.get('apiKey') != null){
+                    hash.data['username'] = this.get('username');
+                    hash.data['api_key'] = this.get('apiKey');
+                }
+            }
+            
+            if (hash.data && type !== 'GET') {
+                hash.contentType = 'application/json; charset=utf-8';
+                hash.data = JSON.stringify(hash.data);
+            }
+            if (adapter.headers !== undefined) {
+                var headers = adapter.headers;
+                hash.beforeSend = function(xhr) {
+                    Ember.keys(headers).forEach(function(key) {
+                        xhr.setRequestHeader(key, headers[key]);
+                    });
+                };
+            }
+            hash.success = function(json) {
+                Ember.run(null, resolve, json);
+            };
+            hash.error = function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR) {
+                    jqXHR.then = null;
+                }
+                Ember.run(null, reject, jqXHR);
+            };
+            Ember.$.ajax(hash);
+        });
+    }, */
+
+    
+    /*ajax: function (url, type, hash) {    	
 		// if the api key and username are set then append them to url	    	
         if(this.get('apiKey') != null && this.get('username') != null && (type.toLowerCase() == "get" || type.toLowerCase() == "delete")){
             var api_key = this.get('apiKey');
@@ -170,7 +219,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         
         //if its post put request then prepare the data
         pass_data = hash.data;
-
+        debugger;
         if (type.toLowerCase() == "post" || type.toLowerCase() == "put"){
         	if(this.get('username') != null && this.get('apiKey') != null){
 	        	hash.data['username'] = this.get('username');
@@ -180,6 +229,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         }
         
         //call wormhole ajax or super ajax if wormhole not set
+        //debugger;
         if(this.get('wormhole') == null){
 	        	return this._super(url, type, hash);
         }
@@ -198,7 +248,7 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 		        		alwaysFunction: this.get('stopLoadingFunction')
 		        	});	
         }
-    },
+    },*/
 
 	/**
 	 * create a record in the server - sends a post request
@@ -215,16 +265,14 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	    xthis = this;
 	    this.ajax(this.buildURL(root), "POST", {
 		      data: data,
-		      success: function(json) {
-		      	if(record.get('id') == null){
-			        	record.set('id', json.id);
-		        }
-		        xthis.didCreateRecord(store, type, record, json);
-		      },
-		      error: function(xhr){
-		      	xthis.didError(store, type, record, xhr);
-		      }
-	    });
+		})
+		.then(function(json){
+		    xthis.didCreateRecord(store, type, record, json);
+		}, function(xhr) {
+            xthis.didError(store, type, record, xhr);
+            throw xhr;
+        }).then(null, DS.rejectionHandler); 
+		
 	},
 
 	/**
@@ -245,13 +293,11 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	    xthis = this;
 	    this.ajax(this.buildURL(root, id), "PUT", {
 		    data: data,
-		    success: function(json) {
-		        xthis.didSaveRecord(store, type, record, json);
-		    },
-		    error: function(xhr){
-			    xthis.didError(store, type, record, xhr);
-		    }
-	    });
+	    })
+	    .then(function(json) {
+	        xthis.didSaveRecord(store, type, record, json);
+	    })
+	    .then(null, DS.rejectionHandler);
 	},
 
 	/**
@@ -268,14 +314,11 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	    id = get(record, 'id');
 	    root = this.rootForType(type);
 	    xthis = this;
-	    this.ajax(this.buildURL(root, id), "DELETE", {
-		    success: function(json) {
-		        xthis.didDeleteRecord(store, type, record, json);
-		    },
-		    error: function(xhr){
-			    xthis.didError(store, type, record, xhr);
-		    }
-	    });
+	    this.ajax(this.buildURL(root, id), "DELETE")
+	    .then(function(json){
+	        xthis.didDeleteRecord(store, type, record, json);
+	    })
+	    .then(null, DS.rejectionHandler);
 	},
 	
 	/**
@@ -301,10 +344,12 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	    url += ids;
 	    xthis = this;
 	    this.ajax(url, "GET", {
-	      success: function(json) {
-	        xthis.didFindMany(store, type, json);
-	      }
-	    });
+	      data: {ids: ids}
+	    })
+	    .then(function(json) {
+            xthis.didFindMany(store, type, json);
+        })
+        .then(null, DS.rejectionHandler);
 	},
 
 	/**
@@ -381,18 +426,19 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
 	 * @param {DS.Model} record
 	 * @return void
 	 */
-	findAll: function(store, type, record){
+	findAll: function(store, type, since){
 	    var json = {}
 	    , root = this.rootForType(type)
 	    , plural = this.pluralize(root);
 	    xthis = this;
-	    this.ajax(this.buildURL(root), "GET", {
-	        data: null,
-	        success: function(json) {
-	                xthis.didFindAll(store, type, json);
-	                
-	        },
-	        error: DS.rejectionHandler
+	    this.ajax(this.buildURL(root), "GET").
+	    then(function(json){
+	        //debugger;
+	        xthis.didFindAll(store, type, json);
+	    }).
+	    then(null, function(){
+	        debugger;
+	        DS.rejectionHandler();
 	    });
 	},
 
@@ -410,12 +456,12 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         xthis = this;
         data = query;
         this.ajax(this.buildURL(root), "GET", {
-            data: data,
-            success: function(json) {
-                    xthis.didFindQuery(store, type, json, recordArray);
-            },
-            error: DS.rejectionHandler
-        });
+            data: data
+        })
+        .then(function(json){
+            xthis.didFindQuery(store, type, json, recordArray);
+        })
+        .then(null, DS.rejectionHandler);
     },
     
     /**
@@ -429,30 +475,11 @@ Nerdeez.DjangoTastypieAdapter = DS.RESTAdapter.extend({
         var json = {}
         , root = this.rootForType(type);
         xthis = this;
-        this.ajax(this.buildURL(root, id), "GET", {
-            success: function(json) {
-                    xthis.didFindRecord(store, type, json, id);
-            },
-            error: DS.rejectionHandler
-        });
+        this.ajax(this.buildURL(root, id), "GET")
+        .then(function(json){
+            xthis.didFindRecord(store, type, json, id);
+        })
+        .then(null, DS.rejectionHandler);
     },
     
-    /**
-     * will handle the error
-     * 
-	 * @param {DS.Store} application store
-	 * @param {submodule of DS.Model} type the class we are performing the action on
-	 * @param {Object} record the problematic record
-	 * @param {Object} xhr json response from the server
-     */
-    didError: function(store, type, record, xhr){
-	    	//var json = JSON.parse(xhr.responseText),
-	    	//var json = xhr;
-		//var serializer = this.get('serializer');
-		//errors = serializer.extractValidationErrors(type, json);
-		//errors = {error: json.responseText}
-		record.set('errors', xhr.responseText);
-		store.recordWasError(record);
-		//this._super(store, type, record, xhr);
-    },
 });

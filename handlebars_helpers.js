@@ -270,3 +270,39 @@ Ember.Handlebars.registerHelper('ifCond', function(v1, v2, options) {
 Ember.Handlebars.registerHelper('format-date', function(date,format,lang) {
     return moment(this.get(date)).lang(lang).format(format);
 });
+
+/**
+ * 
+ * will return a fixed number
+ * 
+ * usage
+ * 
+ * ```handlebar
+ * {{toFixed num digits}}
+ * ```
+ * 
+ * 
+ * @param {number|string} num number
+ * @param {number} digits number of digits after the point
+ * @return {float}
+ */
+Ember.Handlebars.registerBoundHelper('toFixed', function(num, digits) {
+    if (Ember.isEmpty(num)) {
+        return 0;
+    }
+    if (Ember.typeOf(num) === "string"){    
+       try {
+            var intNum = parseInt(num);
+            if (isNaN(intNum)) return 0;
+            return intNum.toFixed(digits);
+       }
+       catch (e){
+            return 0;
+       }
+    }
+
+    else{
+        return num.toFixed(digits);
+    }
+
+});

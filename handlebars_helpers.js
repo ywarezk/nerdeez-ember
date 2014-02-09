@@ -267,8 +267,11 @@ Ember.Handlebars.registerHelper('ifCond', function(v1, v2, options) {
  * @return {string}
  */
 
-Ember.Handlebars.registerHelper('format-date', function(date,format,lang) {
-    return moment(this.get(date)).lang(lang).format(format);
+Ember.Handlebars.registerBoundHelper('format-date', function(date,format,lang) {
+    if (Ember.isEmpty(date)) {
+        return "";
+    }
+    return moment(date).lang(lang).format(format);
 });
 
 /**

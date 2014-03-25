@@ -309,3 +309,63 @@ Ember.Handlebars.registerBoundHelper('toFixed', function(num, digits) {
     }
 
 });
+
+/**
+ * 
+ * will check if a route is authorized for the current logged in user.
+ * the handlebar expects an Auth singleton and a route name.
+ * the helper pressumes you have an 'Auth' signleton and that it implements an 'isRouteAuthorized' method,
+ * which receives routeName as an arg.
+ * for example :
+ * ```handlebar
+ * 
+ * {{#isAuthorized "Ticketz.auth" "profile.transaction"}}
+ *        <li>
+ *               {{#linkTo 'profile.transaction'}}
+ *                 <i class="icon-credit-card"></i>
+ *                 <span>עסקאות</span>
+ *               {{/linkTo}}
+ *       </li>
+ * {{/isAuthorized}}
+ *
+ * ```
+ * 
+ * general usage
+ * 
+ * ```handlebar
+ * {{#isAuthorized App.Singleton routeName}}
+ * {{/isAuthorized}}
+ * ```
+ * 
+ * 
+ * @param {string} routeName - the route we want to check
+ * @param {string}  auth - the auth singleton which will be evaluated using 'eval'
+ * @return {boolean} true if the route is authorized for the user
+ */
+Ember.Handlebars.registerHelper('isAuthorized', function(auth,routeName,options) {
+
+    //validate params are not null and that the auth is evaluated to object
+    if (Ember.isEmpty(routeName) || Ember.isEmpty(auth)) {
+        return options.inverse(this);
+    }
+    if (typeof(eval(auth)) != 'object') {
+        return options.invers(this);
+    }
+    //check if the user is authorized
+    try 
+    {
+        auth = eval(auth);
+        if (auth.isRouteAuthorized(routeName) == true) {
+            return options.fn(this);
+        }
+        else {
+            return options.inverse(this);
+        }
+    }
+    catch (e)
+    {
+            return options.inverse(this);
+    }
+
+
+});
